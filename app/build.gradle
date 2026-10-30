@@ -10,8 +10,8 @@ android {
         applicationId "com.saimo.tv"
         minSdk 21          // Android 5.0+ (Mi TV Stick usa Android TV 9)
         targetSdk 34
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
     }
 
     buildTypes {

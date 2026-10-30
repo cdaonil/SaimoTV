@@ -141,13 +141,24 @@ public class MainActivity extends Activity {
         else webView.loadUrl(HOME_URL);
     }
 
-    /** Deixa o foco do controle remoto bem visível e mapeia OK/setas onde o site não trata. */
+    private String tvNavJs;
+
+    /** Injeta a navegação por setas/OK (assets/tvnav.js) para os cards do site. */
     private void injectTvHelpers() {
-        String js = "(function(){if(window.__saimoTv)return;window.__saimoTv=1;"
-                + "var st=document.createElement('style');"
-                + "st.textContent=':focus{outline:3px solid #f5c518 !important;outline-offset:2px;}';"
-                + "document.head&&document.head.appendChild(st);})();";
-        webView.evaluateJavascript(js, null);
+        if (tvNavJs == null) {
+            try {
+                java.io.InputStream in = getAssets().open("tvnav.js");
+                java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream();
+                byte[] buf = new byte[4096];
+                int n;
+                while ((n = in.read(buf)) > 0) out.write(buf, 0, n);
+                in.close();
+                tvNavJs = out.toString("UTF-8");
+            } catch (java.io.IOException e) {
+                tvNavJs = "";
+            }
+        }
+        if (!tvNavJs.isEmpty()) webView.evaluateJavascript(tvNavJs, null);
     }
 
     private void showErrorPage() {
